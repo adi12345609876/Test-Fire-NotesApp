@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen, signOut } from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
+import EditScreen from "./screens/EditorScreen";
 import CreateScreen from "./screens/CreateScreen";
 import { useNavigation } from "@react-navigation/native";
 import NotesScreen from "./screens/NotesScreen";
@@ -67,10 +68,9 @@ function LeftButton() {
 export default function App({ navigation }) {
   const currentuser = getAuthInfo();
   const data = Data();
-  //map item from above data
-  // const mapItem = data.map((item) => {
-  //   console.log(item.title);
-  // });
+  useEffect(() => {
+    console.log(currentuser?.uid);
+  }, [currentuser]);
 
   return (
     <NavigationContainer>
@@ -88,6 +88,7 @@ export default function App({ navigation }) {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Create" component={CreateScreen} />
         <Stack.Screen name="Notes" component={NotesScreen} />
+        <Stack.Screen name="Edit" component={EditScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

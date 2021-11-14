@@ -1,9 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { FAB } from "react-native-paper";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Button, FAB } from "react-native-paper";
 import { getAuthInfo, signout, Data, DataColor } from "../Firebase/FireConfig";
 // import { Datareciver } from "../Firebase/FireComp";
+import { useNavigation } from "@react-navigation/native";
+
 //sigh out functions
 export const signOut = async () => {
   try {
@@ -20,14 +22,27 @@ export const Notes = () => {
   const currentuser = getAuthInfo();
   const data = Data();
   const [color, setColor] = useState("#e0e");
+  const navigation = useNavigation();
 
   //map the data and setColor
 
   return (
     <View>
       {data.map((item) => (
-        <View style={[styles.ColourBox, { backgroundColor: `${item.color}` }]}>
-          <Text style={styles.Heading}>{item.title}</Text>
+        <View>
+          <TouchableOpacity
+            style={[styles.ColourBox, { backgroundColor: `${item.color}` }]}
+            onPress={() =>
+              navigation.navigate("Notes", {
+                color: item.color,
+                id: item.id,
+                title: item.title,
+                description: item.description,
+              })
+            }
+          >
+            <Text style={styles.Heading}>{item.title}</Text>
+          </TouchableOpacity>
         </View>
       ))}
     </View>
@@ -46,7 +61,7 @@ export function HomeScreen({ navigation }) {
         style={styles.fab}
         small
         icon="plus"
-        onPress={() => console.log("Pressed")}
+        onPress={() => navigation.navigate("Create")}
       />
       <StatusBar style="auto" />
     </View>

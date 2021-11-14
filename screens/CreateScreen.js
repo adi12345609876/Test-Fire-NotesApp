@@ -1,23 +1,54 @@
-import { setStatusBarBackgroundColor, setStatusBarNetworkActivityIndicatorVisible, StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Button,
+} from "react-native";
+import { db } from "../Firebase/FireConfig";
+import { addDoc, collection } from "firebase/firestore";
+//firebase add doc
 
 export default function CreateScreen({ navigation }) {
+  const [newtitle, setNewtitle] = useState("");
+  const [newdescription, setNewdescription] = useState("");
+  const [newcolor, setNewcolor] = useState("");
+  const currentuser = getAuthInfo();
+  const addColor = async () => {
+    if (
+      newtitle.length > 0 &&
+      newdescription.length > 0 &&
+      newcolor.length > 0
+    ) {
+      const colRef = collection(db, "Users", currentuser?.uid, "Notes");
+      const values = {
+        title: newtitle,
+        description: newdescription,
+        color: newcolor,
+      };
+      const DocRef = await addDoc(colRef, values);
+      navigation.navigate("Home");
+    } else {
+      alert("Please fill all the fields");
+    }
+  };
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
         placeholder="Enter your tirle"
-      // onChangeText={(text) => {
-      //   setTitle(text);
-      // }}
+        onChangeText={(text) => {
+          setNewtitle(text);
+        }}
       />
       <TextInput
         style={styles.input}
         placeholder="Enter your description"
-      // onChangeText={(text) => {
-      //   setTitle(text);
-      // }}
+        onChangeText={(text) => {
+          setNewdescription(text);
+        }}
       />
 
       <TouchableOpacity
@@ -32,10 +63,9 @@ export default function CreateScreen({ navigation }) {
           flexDirection: "column",
         }}
         onPress={() => {
-          setColor("#e0e")
+          setNewcolor("#e0e");
         }}
-      >
-      </TouchableOpacity>
+      ></TouchableOpacity>
 
       <TouchableOpacity
         style={{
@@ -48,11 +78,9 @@ export default function CreateScreen({ navigation }) {
           backgroundColor: "#fff",
         }}
         onPress={() => {
-          setColor("#fff")
+          setNewcolor("#fff");
         }}
-      >
-
-      </TouchableOpacity>
+      ></TouchableOpacity>
       <TouchableOpacity
         style={{
           marginBottom: 10,
@@ -64,11 +92,9 @@ export default function CreateScreen({ navigation }) {
           backgroundColor: "#f03",
         }}
         onPress={() => {
-          setColor("#f03")
+          setNewcolor("#f03");
         }}
-      >
-
-      </TouchableOpacity>
+      ></TouchableOpacity>
 
       <TouchableOpacity
         style={{
@@ -81,12 +107,13 @@ export default function CreateScreen({ navigation }) {
           backgroundColor: "#0d0",
         }}
         onPress={() => {
-          setColor("#0d0")
+          setNewcolor("#0d0");
         }}
-      >
-
-      </TouchableOpacity>
-
+      ></TouchableOpacity>
+      <Button title="Create" onPress={addColor} />
+      <Text>{newtitle}</Text>
+      <Text>{newdescription}</Text>
+      <Text>{newcolor}</Text>
     </View>
   );
 }
@@ -94,9 +121,9 @@ export default function CreateScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   //round color button
   colorButton: {
@@ -115,5 +142,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "#000",
-  }
+  },
 });

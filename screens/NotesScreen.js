@@ -1,28 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { FAB } from "react-native-paper";
 
-export default function NotesScreen({ navigation }) {
+export default function NotesScreen({ navigation, route }) {
+  const { title } = route.params;
+  const { color } = route.params;
+  const { id } = route.params;
+  const { description } = route.params;
+
   return (
     <View style={styles.container}>
       <View style={[styles.container, { flexDirection: "column" }]}>
-
-        <View style={[styles.ColourBox, { backgroundColor: "#e0e", }]} >
-          <Text style={styles.Heading}>Title</Text>
-          <Text style={styles.description}>Use flex in a component's style to have the component expand and shrink dynamically based on available space. Normally you will use flex: 1, which tells a component to fill all available space, shared evenly amongst other components with the same parent. The larger the flex given, the higher the ratio of space a component will take compared to its siblings.
-          </Text>
+        <View style={[styles.ColourBox, { backgroundColor: `${color}` }]}>
+          <Text style={styles.Heading}>{title}</Text>
+          <Text style={styles.description}>{description}</Text>
         </View>
-
-
       </View>
-
 
       <FAB
         style={styles.fab}
         small
         icon="pencil"
-        onPress={() => console.log("Edited")}
+        onPress={navigation.navigate("Edit", {
+          title,
+          color,
+          id,
+          description,
+        })}
       />
       <StatusBar style="auto" />
     </View>
@@ -63,6 +68,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     color: "#000",
-
   },
 });
