@@ -21,8 +21,7 @@ export default function EditScreen({ navigation, route }) {
   const [newcolor, setNewcolor] = useState(color);
 
   const Editing = async () => {
-    const currentuser = getAuthInfo();
-    const docRef = doc(db, "Users", currentuser?.uid, "Notes", id);
+    const docRef = doc(db, "Users", "userid", "Notes", id);
     const payload = {
       title: newtitle,
       color: newcolor,
@@ -34,8 +33,7 @@ export default function EditScreen({ navigation, route }) {
     console.log(id);
   };
   const Deleteing = async () => {
-    const currentuser = getAuthInfo();
-    const docRef = doc(db, "Users", currentuser?.uid, "Notes", id);
+    const docRef = doc(db, "Users", "userid", "Notes", id);
     await deleteDoc(docRef);
     navigation.navigate("Home");
   };

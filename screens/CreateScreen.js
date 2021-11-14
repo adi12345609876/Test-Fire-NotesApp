@@ -22,7 +22,7 @@ export default function CreateScreen({ navigation }) {
       newdescription.length > 0 &&
       newcolor.length > 0
     ) {
-      const colRef = collection(db, "Users", currentuser?.uid, "Notes");
+      const colRef = collection(db, "Users", "userid", "Notes");
       const values = {
         title: newtitle,
         description: newdescription,

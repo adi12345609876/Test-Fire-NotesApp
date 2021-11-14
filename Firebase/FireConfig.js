@@ -55,7 +55,7 @@ export const Data = () => {
   const currentuser = getAuthInfo();
   const [data, setData] = useState([]);
   useEffect(() => {
-    const collectionRef = collection(db, "Users", currentuser?.uid, "Notes");
+    const collectionRef = collection(db, "Users", "userid", "Notes");
     const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
       const results = snapshot.docs.map((doc) => ({
         id: doc.id,

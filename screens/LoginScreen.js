@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,21 +11,30 @@ import {
 } from "react-native";
 
 import { Glogin, getAuthInfo } from "../Firebase/FireConfig";
+import { getFirestore, onSnapshot, collection, doc } from "firebase/firestore";
 
 export default function LoginScreen({ navigation }) {
   const currentuser = getAuthInfo();
 
+  // function GoogleLogin() {
+  //   Glogin()
+  //     .then((user) => console.log(user))
+  //     .catch(() => alert("Login Failed"));
+  // }
   function GoogleLogin() {
     Glogin()
-      .then((user) => console.log("success"))
+      .then((users) => {
+        const docRef = doc(db, "Users", users.user.uid, "Notes", id);
+        const payload = {
+          title: "newtitle",
+          color: "newcolor",
+          description: "newdescription",
+        };
+        setDoc(docRef, payload);
+        console.log(users);
+      })
       .catch(() => alert("Login Failed"));
   }
-  useEffect(() => {
-    if (currentuser) {
-      navigation.navigate("Home");
-    }
-  }, [currentuser]);
-
   console.log(currentuser?.email);
   return (
     <View style={styles.container}>
