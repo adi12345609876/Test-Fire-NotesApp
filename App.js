@@ -1,21 +1,103 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Button, View, Text, StyleSheet, Image } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { HomeScreen, signOut } from "./screens/HomeScreen";
+import LoginScreen from "./screens/LoginScreen";
+import CreateScreen from "./screens/CreateScreen";
+import { useNavigation } from "@react-navigation/native";
+import NotesScreen from "./screens/NotesScreen";
+import { FAB } from "react-native-paper";
+import { getAuthInfo, Data } from "./Firebase/FireConfig";
+import {
+  getFirestore,
+  onSnapshot,
+  collection,
+  getDoc,
+  doc,
+  setDoc,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore";
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+function LogoTitle() {
+  const currentuser = getAuthInfo();
+  const photoURL = currentuser?.photoURL;
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+      <Image
+        style={{
+          width: 50,
+          height: 50,
+          backgroundColor: "grey",
+          resizeMode: "center",
+          borderRadius: 50,
+          borderColor: "#000",
+          borderWidth: 4,
+        }}
+        source={{
+          uri: photoURL,
+        }}
+      />
+      <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+        {currentuser?.email}
+      </Text>
     </View>
+  );
+}
+//left Button
+function LeftButton() {
+  const navigation = useNavigation();
+  return (
+    <View style={{ flexDirection: "row" }}>
+      <Button
+        title="Sign Out"
+        onPress={() => {
+          navigation.navigate("Login"), signOut();
+        }}
+        color="red"
+      />
+    </View>
+  );
+}
+
+export default function App({ navigation }) {
+  const currentuser = getAuthInfo();
+  const data = Data();
+  //map item from above data
+  // const mapItem = data.map((item) => {
+  //   console.log(item.title);
+  // });
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            headerTitle: () => <LogoTitle />,
+            title: null,
+            headerLeft: null,
+            headerRight: () => <LeftButton />,
+          }}
+        />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Create" component={CreateScreen} />
+        <Stack.Screen name="Notes" component={NotesScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
