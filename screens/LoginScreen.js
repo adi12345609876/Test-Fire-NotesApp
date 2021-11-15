@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,38 +9,40 @@ import {
   Alert,
   Platform,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Glogin, getAuthInfo, db } from "../Firebase/FireConfig";
+import {
+  getFirestore,
+  onSnapshot,
+  collection,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 
-import { Glogin, getAuthInfo } from "../Firebase/FireConfig";
-import { getFirestore, onSnapshot, collection, doc } from "firebase/firestore";
+export const customidcreated = async (users) => {
+  await setDoc(doc(db, "Users", users.user.uid, "Notes", "notes id"), {
+    color: "#e0e",
+    title: "own title",
+    description: "owndescription",
+  });
+};
 
-export default function LoginScreen({ navigation }) {
+export function LoginScreen({ navigation }) {
   const currentuser = getAuthInfo();
-
-  // function GoogleLogin() {
-  //   Glogin()
-  //     .then((user) => console.log(user))
-  //     .catch(() => alert("Login Failed"));
-  // }
+  console.log("current user =", currentuser?.uid);
   function GoogleLogin() {
     Glogin()
       .then((users) => {
-        const docRef = doc(db, "Users", users.user.uid, "Notes", id);
-        const payload = {
-          title: "newtitle",
-          color: "newcolor",
-          description: "newdescription",
-        };
-        setDoc(docRef, payload);
-        console.log(users);
+        customidcreated(users);
       })
       .catch(() => alert("Login Failed"));
   }
-  console.log(currentuser?.email);
+
   return (
     <View style={styles.container}>
       <Text style={styles.Heading}>Welcome To-Do list</Text>
       <View style={styles.button}>
-        <Button title="Google sign in" onPress={GoogleLogin} />
+        <Button title="Google log in" onPress={GoogleLogin} />
       </View>
     </View>
   );

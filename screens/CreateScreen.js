@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Button,
 } from "react-native";
-import { db } from "../Firebase/FireConfig";
+import { db, getAuthInfo } from "../Firebase/FireConfig";
 import { addDoc, collection } from "firebase/firestore";
 //firebase add doc
 
@@ -22,7 +22,7 @@ export default function CreateScreen({ navigation }) {
       newdescription.length > 0 &&
       newcolor.length > 0
     ) {
-      const colRef = collection(db, "Users", "userid", "Notes");
+      const colRef = collection(db, "Users", currentuser?.uid, "Notes");
       const values = {
         title: newtitle,
         description: newdescription,
@@ -35,7 +35,7 @@ export default function CreateScreen({ navigation }) {
     }
   };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: `${newcolor}` }]}>
       <TextInput
         style={styles.input}
         placeholder="Enter your tirle"
@@ -111,9 +111,6 @@ export default function CreateScreen({ navigation }) {
         }}
       ></TouchableOpacity>
       <Button title="Create" onPress={addColor} />
-      <Text>{newtitle}</Text>
-      <Text>{newdescription}</Text>
-      <Text>{newcolor}</Text>
     </View>
   );
 }
@@ -121,7 +118,7 @@ export default function CreateScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+
     alignItems: "center",
     justifyContent: "center",
   },

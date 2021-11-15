@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { FAB } from "react-native-paper";
 import { setDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
-import { db } from "../Firebase/FireConfig";
+import { db, getAuthInfo } from "../Firebase/FireConfig";
 export default function EditScreen({ navigation, route }) {
   const { title } = route.params;
   const { color } = route.params;
@@ -19,9 +19,9 @@ export default function EditScreen({ navigation, route }) {
   const [newtitle, setNewtitle] = useState(title);
   const [newdescription, setNewdescription] = useState(description);
   const [newcolor, setNewcolor] = useState(color);
-
+  const currentuser = getAuthInfo();
   const Editing = async () => {
-    const docRef = doc(db, "Users", "userid", "Notes", id);
+    const docRef = doc(db, "Users", currentuser?.uid, "Notes", id);
     const payload = {
       title: newtitle,
       color: newcolor,
@@ -32,8 +32,9 @@ export default function EditScreen({ navigation, route }) {
 
     console.log(id);
   };
+
   const Deleteing = async () => {
-    const docRef = doc(db, "Users", "userid", "Notes", id);
+    const docRef = doc(db, "Users", currentuser?.uid, "Notes", id);
     await deleteDoc(docRef);
     navigation.navigate("Home");
   };

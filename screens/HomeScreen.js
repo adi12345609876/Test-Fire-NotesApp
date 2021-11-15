@@ -51,6 +51,19 @@ export const Notes = () => {
 export function HomeScreen({ navigation }) {
   const currentuser = getAuthInfo();
   const data = Data();
+  const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(2);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((timer) => timer - 1);
+    }, 1000);
+    if (timer === 0 && !currentuser) {
+      navigation.navigate("Login");
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
+
   return (
     <View style={styles.container}>
       <View style={[styles.container, { flexDirection: "column" }]}>

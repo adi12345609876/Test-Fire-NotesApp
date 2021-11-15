@@ -3,7 +3,7 @@ import { Button, View, Text, StyleSheet, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen, signOut } from "./screens/HomeScreen";
-import LoginScreen from "./screens/LoginScreen";
+import { LoginScreen, customidcreated } from "./screens/LoginScreen";
 import EditScreen from "./screens/EditorScreen";
 import CreateScreen from "./screens/CreateScreen";
 import { useNavigation } from "@react-navigation/native";
@@ -69,12 +69,14 @@ export default function App({ navigation }) {
   const currentuser = getAuthInfo();
   const data = Data();
   useEffect(() => {
-    console.log(currentuser?.uid);
+    if (currentuser) {
+      navigation.navigate("Home");
+    }
   }, [currentuser]);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -85,7 +87,14 @@ export default function App({ navigation }) {
             headerRight: () => <LeftButton />,
           }}
         />
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            title: "Login",
+            headerLeft: null,
+          }}
+        />
         <Stack.Screen name="Create" component={CreateScreen} />
         <Stack.Screen name="Notes" component={NotesScreen} />
         <Stack.Screen name="Edit" component={EditScreen} />
