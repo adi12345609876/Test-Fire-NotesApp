@@ -7,6 +7,8 @@ import {
   onAuthStateChanged,
   signOut,
   signInAnonymously,
+  signInWithCredential,
+  signInWithRedirect,
 } from "firebase/auth";
 import { getFirestore, onSnapshot, collection, doc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
@@ -33,9 +35,13 @@ const auth = getAuth();
 
 export const db = getFirestore();
 //google sign in
+// export const Glogin = () => {
+//   const provider = new GoogleAuthProvider();
+//   return signInWithPopup(auth, provider);
+// };
 export const Glogin = () => {
   const provider = new GoogleAuthProvider();
-  return signInWithPopup(auth, provider);
+  return signInWithRedirect(auth, provider);
 };
 export function Anonymouslogin() {
   return signInAnonymously(auth);

@@ -85,10 +85,10 @@ export default function App({ navigation }) {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{
-            title: "Login",
-            headerLeft: null,
-          }}
+          // options={{
+          //   title: "Login",
+          //   headerLeft: null,
+          // }}
         />
         <Stack.Screen name="Create" component={CreateScreen} />
         <Stack.Screen name="Notes" component={NotesScreen} />
