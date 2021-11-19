@@ -10,7 +10,12 @@ import {
   Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Glogin, getAuthInfo, db } from "../Firebase/FireConfig";
+import {
+  Glogin,
+  Anonymouslogin,
+  getAuthInfo,
+  db,
+} from "../Firebase/FireConfig";
 import {
   getFirestore,
   onSnapshot,
@@ -37,12 +42,20 @@ export function LoginScreen({ navigation }) {
       })
       .catch(() => alert("Login Failed"));
   }
+  const GuestLogin = () => {
+    Anonymouslogin()
+      .then((users) => {
+        customidcreated(users);
+      })
+      .catch(() => alert("Login Failed"));
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.Heading}>Welcome To-Do list</Text>
       <View style={styles.button}>
         <Button title="Google log in" onPress={GoogleLogin} />
+        <Button title="Guest" onPress={GuestLogin} />
       </View>
     </View>
   );

@@ -17,22 +17,14 @@ export default function CreateScreen({ navigation }) {
   const [newcolor, setNewcolor] = useState("");
   const currentuser = getAuthInfo();
   const addColor = async () => {
-    if (
-      newtitle.length > 0 &&
-      newdescription.length > 0 &&
-      newcolor.length > 0
-    ) {
-      const colRef = collection(db, "Users", currentuser?.uid, "Notes");
-      const values = {
-        title: newtitle,
-        description: newdescription,
-        color: newcolor,
-      };
-      const DocRef = await addDoc(colRef, values);
-      navigation.navigate("Home");
-    } else {
-      alert("Please fill all the fields");
-    }
+    const colRef = collection(db, "Users", currentuser?.uid, "Notes");
+    const values = {
+      title: newtitle,
+      description: newdescription,
+      color: newcolor,
+    };
+    const DocRef = await addDoc(colRef, values);
+    navigation.navigate("Home");
   };
   return (
     <View style={[styles.container, { backgroundColor: `${newcolor}` }]}>

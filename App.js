@@ -68,15 +68,10 @@ function LeftButton() {
 export default function App({ navigation }) {
   const currentuser = getAuthInfo();
   const data = Data();
-  useEffect(() => {
-    if (currentuser) {
-      navigation.navigate("Home");
-    }
-  }, [currentuser]);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
           component={HomeScreen}

@@ -10,9 +10,11 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^13.0.1",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "expo": "~43.0.2",
+    "expo-notifications": "~0.13.3",
     "expo-status-bar": "~1.1.0",
     "firebase": "^9.4.1",
     "react": "17.0.1",

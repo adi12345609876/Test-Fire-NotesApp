@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   onAuthStateChanged,
   signOut,
+  signInAnonymously,
 } from "firebase/auth";
 import { getFirestore, onSnapshot, collection, doc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
@@ -36,7 +37,9 @@ export const Glogin = () => {
   const provider = new GoogleAuthProvider();
   return signInWithPopup(auth, provider);
 };
-
+export function Anonymouslogin() {
+  return signInAnonymously(auth);
+}
 //get auth info through onAuthStateChanged
 export function getAuthInfo() {
   const [currentuser, setCurrentUser] = useState();

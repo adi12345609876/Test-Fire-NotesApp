@@ -1,11 +1,22 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Button, FAB } from "react-native-paper";
 import { getAuthInfo, signout, Data, DataColor } from "../Firebase/FireConfig";
 // import { Datareciver } from "../Firebase/FireComp";
 import { useNavigation } from "@react-navigation/native";
-
+//expo push notification
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+//setting
+//*
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => ({
+//     shouldShowAlert: true,
+//     shouldPlaySound: false,
+//     shouldSetBadge: false,
+//   }),
+// });
 //sigh out functions
 export const signOut = async () => {
   try {
@@ -14,10 +25,7 @@ export const signOut = async () => {
     console.log(error);
   }
 };
-// useEffect(() => {
-//   const datas = Datareciver();
-//   console.log(datas);
-// }, []);
+
 export const Notes = () => {
   const currentuser = getAuthInfo();
   const data = Data();
@@ -63,13 +71,43 @@ export function HomeScreen({ navigation }) {
     }
     return () => clearInterval(interval);
   }, [timer]);
+  // useEffect(() => {
+  //   if (currentuser) {
+  //     navigation.navigate("Home");
+  //   }
+  // });
 
+  //expo push notification
+
+  // const [expoPushToken, setExpoPushToken] = useState("");
+  // const [notification, setNotification] = useState(false);
+  // const notificationListener = useRef();
+
+  // useEffect(() => {
+  //   console.log("useEffect");
+  // }, []);
+  // useEffect(() => {
+  //   //using the token we got
+  //   registerForPushNotificationsAsync().then((token) =>
+  //     setExpoPushToken(token)
+  //   );
+  //   //get data from the notification to be used in return()
+  //   notificationListener.current =
+  //     Notifications.addNotificationReceivedListener((notification) => {
+  //       setNotification(notification);
+  //     });
+  // }, []);
   return (
     <View style={styles.container}>
       <View style={[styles.container, { flexDirection: "column" }]}>
         <Notes />
       </View>
-
+      <Button
+        title="Press to schedule a "
+        onPress={async () => {
+          await schedulePushNotification();
+        }}
+      />
       <FAB
         style={styles.fab}
         small
@@ -80,7 +118,47 @@ export function HomeScreen({ navigation }) {
     </View>
   );
 }
+// async function schedulePushNotification() {
+//   await Notifications.scheduleNotificationAsync({
+//     content: {
+//       title: "You've got mail! 📬",
+//       body: "Here is the notification body",
+//       data: { data: "goes here" },
+//     },
+//     trigger: { seconds: 2 },
+//   });
+// }
+// async function registerForPushNotificationsAsync() {
+//   let token;
+//   if (Constants.isDevice) {
+//     const { status: existingStatus } =
+//       await Notifications.getPermissionsAsync();
+//     let finalStatus = existingStatus;
+//     if (existingStatus !== "granted") {
+//       const { status } = await Notifications.requestPermissionsAsync();
+//       finalStatus = status;
+//     }
+//     if (finalStatus !== "granted") {
+//       alert("Failed to get push token for push notification!");
+//       return;
+//     }
+//     token = (await Notifications.getExpoPushTokenAsync()).data;
+//     console.log(token);
+//   } else {
+//     alert("Must use physical device for Push Notifications");
+//   }
 
+//   if (Platform.OS === "android") {
+//     Notifications.setNotificationChannelAsync("default", {
+//       name: "default",
+//       importance: Notifications.AndroidImportance.MAX,
+//       vibrationPattern: [0, 250, 250, 250],
+//       lightColor: "#FF231F7C",
+//     });
+//   }
+
+//   return token;
+// }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
